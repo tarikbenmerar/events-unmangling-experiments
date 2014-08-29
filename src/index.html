@@ -67,18 +67,24 @@
 			console.log('Switch button down');
 		},
 
+		onFocus: function () {
+			this.rootEl.css('outline', 'blue dotted');
+		},
+
 		onInputElFocus: function () {
 			console.log('input element on focus');
 			this.itemsEl.css('display', 'block');
+			this.onFocus();
 		},
 
 		onRootElFocus: function () {
 			console.log('root element on focus');
 			this.inputEl.focus();
-
+			this.onFocus();
 		},
 
 		onRootElFocusOut: function () {
+			this.rootEl.css('outline', 'none');
 			console.log('root element on focus out');
 			this.itemsEl.css('display', 'none');
 		}
