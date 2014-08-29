@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Mangled Events Example</title>
+	<link rel="stylesheet" type="text/css" href="css/style.css"/>
+	<script type="text/javascript" src="js/lodash.underscore.js"></script>
+	<script type="text/javascript" src="js/jquery-1.11.1.js"></script>
+</head>
+<body>
+<h1>Mangled Events Example</h1>
+<div class="root_element" tabindex="0" role="widget">
+	<div><input class="input" type="text" /></div>
+	<div class="switch_button"><button tabindex="-1">=</button></div>
+	<ul class="items">
+		<li>item1</li>
+		<li>item2</li>
+		<li>item3</li>
+		<li>item4</li>
+	</ul>
+</div>
+<script>
+	$(function () {
+		var itemsEl = $('.items'),
+			inputEl = $('.input');
+		
+
+		//Switching items element display on click
+		$('.switch_button').click(function () {
+			if( itemsEl.css('display') === 'block' ) {
+				itemsEl.css( 'display', 'none' );
+			} else {
+				itemsEl.css( 'display', 'block' );
+			}
+
+			$('.root_element').focus();
+		});
+
+		//Put the input element on root element focus
+		$('.root_element').focus(function () {
+			console.log('root element on focus');
+			inputEl.focus();
+		});
+
+		//Display items on input element focus
+		$('.input').focus(function () {
+			console.log('input element on focus');
+			itemsEl.css('display', 'block');
+		});
+
+
+		//Hide the items, on root element focusout
+		$('.root_element').focusout(function () {
+			console.log('root element on focus out');
+			itemsEl.css('display', 'none');
+		});
+
+	});
+</script>
+
+</body>
+</html>
