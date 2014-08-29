@@ -69,17 +69,18 @@
 
 		onInputElFocus: function () {
 			console.log('input element on focus');
-			self.itemsEl.css('display', 'block');
+			this.itemsEl.css('display', 'block');
 		},
 
 		onRootElFocus: function () {
 			console.log('root element on focus');
-			self.inputEl.focus();
+			this.inputEl.focus();
+
 		},
 
 		onRootElFocusOut: function () {
 			console.log('root element on focus out');
-			self.itemsEl.css('display', 'none');
+			this.itemsEl.css('display', 'none');
 		}
 	}
 	$(function () {
