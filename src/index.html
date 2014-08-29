@@ -19,41 +19,72 @@
 	</ul>
 </div>
 <script>
-	$(function () {
-		var itemsEl = $('.items'),
-			inputEl = $('.input');
-		
+	//Widget
+	var widget = {
+		init: function () {
+			var self = this;
 
-		//Switching items element display on click
-		$('.switch_button').click(function () {
+			var itemsEl = $('.items'),
+				inputEl = $('.input');
+
+			//Put the input element on root element focus
+			this.rootEl.focus(function () {
+				self.onRootElFocus();
+			});
+
+			//Display items on input element focus
+			this.inputEl.focus(function () {
+				self.onInputElFocus();
+			});
+
+			//Hide the items, on root element focusout
+			this.rootEl.focusout(function () {
+				self.onRootElFocusOut();
+			});
+
+			//Switching items element display on click
+			this.switchBtn.click(function () {
+				self.onSwitchBtnClick();
+			});
+		},
+
+		rootEl: $( '.root_element' ),
+		switchBtn: $( '.switch_button' ),
+		itemsEl: $('.items'),
+		inputEl: $('.input'),
+		onSwitchBtnClick: function () {
+			var itemsEl = this.itemsEl;
 			if( itemsEl.css('display') === 'block' ) {
 				itemsEl.css( 'display', 'none' );
 			} else {
 				itemsEl.css( 'display', 'block' );
 			}
 
-			$('.root_element').focus();
-		});
+			//Put the root element on focus
+			this.rootEl.focus();
 
-		//Put the input element on root element focus
-		$('.root_element').focus(function () {
-			console.log('root element on focus');
-			inputEl.focus();
-		});
+			//Log the event
+			console.log('Switch button down');
+		},
 
-		//Display items on input element focus
-		$('.input').focus(function () {
+		onInputElFocus: function () {
 			console.log('input element on focus');
-			itemsEl.css('display', 'block');
-		});
+			self.itemsEl.css('display', 'block');
+		},
 
+		onRootElFocus: function () {
+			console.log('root element on focus');
+			self.inputEl.focus();
+		},
 
-		//Hide the items, on root element focusout
-		$('.root_element').focusout(function () {
+		onRootElFocusOut: function () {
 			console.log('root element on focus out');
-			itemsEl.css('display', 'none');
-		});
-
+			self.itemsEl.css('display', 'none');
+		}
+	}
+	$(function () {
+		//Init the widget
+		widget.init();
 	});
 </script>
 
