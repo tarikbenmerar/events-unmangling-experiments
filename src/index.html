@@ -47,7 +47,7 @@
 				self.onSwitchBtnClick();
 			});
 
-			this.setRootElOutline = _.throttle( this.setRootElOutline, 300, { leading: false, trailing: true} );
+			this.setRootElOutline = _.throttle( this.setRootElOutline, 100, { leading: false, trailing: true} );
 		},
 
 		rootEl: $( '.root_element' ),
