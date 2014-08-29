@@ -38,7 +38,7 @@
 			});
 
 			//Hide the items, on root element focusout
-			this.rootEl.focusout(function () {
+			this.rootEl.focusout(function ( e ) {
 				self.onRootElFocusOut();
 			});
 
@@ -46,6 +46,8 @@
 			this.switchBtn.click(function () {
 				self.onSwitchBtnClick();
 			});
+
+			this.setRootElOutline = _.throttle( this.setRootElOutline, 300, { leading: false, trailing: true} );
 		},
 
 		rootEl: $( '.root_element' ),
@@ -67,27 +69,29 @@
 			console.log('Switch button down');
 		},
 
+		setRootElOutline: function ( outline ) {
+			console.log(outline);
+			this.rootEl.css('outline', outline );
+		},
+
 		onFocus: function () {
-			this.rootEl.css('outline', 'blue dotted');
+			this.setRootElOutline( 'blue dotted' );
 		},
 
 		onInputElFocus: function () {
-			console.log('input element on focus');
 			this.itemsEl.css('display', 'block');
 			this.onFocus();
 		},
 
 		onRootElFocus: function () {
-			console.log('root element on focus');
 			this.inputEl.focus();
 			this.onFocus();
 		},
 
 		onRootElFocusOut: function () {
-			this.rootEl.css('outline', 'none');
-			console.log('root element on focus out');
+			this.setRootElOutline( 'none' );
 			this.itemsEl.css('display', 'none');
-		}
+		},
 	}
 	$(function () {
 		//Init the widget
