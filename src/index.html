@@ -19,6 +19,37 @@
 	</ul>
 </div>
 <script>
+	//Prioritised throttling
+	var prioritisedThrottle = function ( func, priorities, timeout ) {
+		var currentPriority = undefined,
+			context,
+			flushPriority = _.throttle(function () {
+				currentPriority = undefined;
+			}, timeout, {leading: false, trailing: true} ),
+			throttledFunc = _.throttle(function () {
+				func.apply( context, arguments );
+			}, timeout, {leading: false, trailing: true} );
+
+		return function ( priority  ) {
+			//Set the function context
+			context = context || this;
+
+			if( currentPriority !== undefined ) {
+				if( priorities[ priority ] > currentPriority ) {
+					throttledFunc( priority );
+					currentPriority = priorities[ priority ];
+				}
+			} else {
+				throttledFunc( priority );
+				currentPriority = priorities[ priority ];
+
+			}
+
+			//Flush the priority
+			flushPriority();
+		}
+	}
+
 	//Widget
 	var widget = {
 		init: function () {
@@ -47,7 +78,9 @@
 				self.onSwitchBtnClick();
 			});
 
-			this.setRootElOutline = _.throttle( this.setRootElOutline, 100, { leading: false, trailing: true} );
+			this.setRootElOutline = _.throttle( this.setRootElOutline, 100, {leading: false, trailing: true} );
+
+			this.handleItemsDisplay = prioritisedThrottle( this.handleItemsDisplay, {focusout: 0, click: 1, focus: -1}, 100 );
 		},
 
 		rootEl: $( '.root_element' ),
@@ -55,18 +88,33 @@
 		itemsEl: $('.items'),
 		inputEl: $('.input'),
 		onSwitchBtnClick: function () {
-			var itemsEl = this.itemsEl;
-			if( itemsEl.css('display') === 'block' ) {
-				itemsEl.css( 'display', 'none' );
-			} else {
-				itemsEl.css( 'display', 'block' );
-			}
+			this.handleItemsDisplay( 'click' );
 
 			//Put the root element on focus
 			this.rootEl.focus();
 
 			//Log the event
 			console.log('Switch button down');
+		},
+
+		handleItemsDisplay: function ( event ) {
+			if( event === 'click' ) {
+				var itemsEl = this.itemsEl;
+				if( itemsEl.css('display') === 'block' ) {
+					this.setItemsDisplay( 'none' );
+				} else {
+					this.setItemsDisplay( 'block' );
+				}
+			} else if( event === 'focusout' ) {
+				this.setItemsDisplay( 'none' );
+			} else {
+				this.setItemsDisplay( 'block' );
+			}
+		},
+
+		setItemsDisplay: function ( display ) {
+			console.log(display);
+			this.itemsEl.css('display', display);
 		},
 
 		setRootElOutline: function ( outline ) {
@@ -79,7 +127,7 @@
 		},
 
 		onInputElFocus: function () {
-			this.itemsEl.css('display', 'block');
+			this.handleItemsDisplay( 'focus' );
 			this.onFocus();
 		},
 
@@ -90,7 +138,7 @@
 
 		onRootElFocusOut: function () {
 			this.setRootElOutline( 'none' );
-			this.itemsEl.css('display', 'none');
+			this.handleItemsDisplay( 'focusout' );
 		},
 	}
 	$(function () {
