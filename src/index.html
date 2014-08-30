@@ -78,6 +78,11 @@
 				self.onSwitchBtnClick();
 			});
 
+			//Preventing mousedown to avoid a bug
+			this.switchBtn.mousedown(function ( e ) {
+				e.preventDefault();
+			})
+
 			this.setRootElOutline = _.throttle( this.setRootElOutline, 100, {leading: false, trailing: true} );
 
 			this.handleItemsDisplay = prioritisedThrottle( this.handleItemsDisplay, {focusout: 0, click: 1, focus: -1}, 100 );
