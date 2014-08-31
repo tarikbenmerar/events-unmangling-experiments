@@ -83,9 +83,9 @@
 				e.preventDefault();
 			})
 
-			this.setRootElOutline = _.throttle( this.setRootElOutline, 100, {leading: false, trailing: true} );
+			this.setRootElOutline = _.throttle( this.setRootElOutline, 20, {leading: false, trailing: true} );
 
-			this.handleItemsDisplay = prioritisedThrottle( this.handleItemsDisplay, {focusout: 0, click: 1, focus: -1}, 100 );
+			this.handleItemsDisplay = prioritisedThrottle( this.handleItemsDisplay, {focusout: 0, click: 1, focus: -1}, 20 );
 		},
 
 		rootEl: $( '.root_element' ),
